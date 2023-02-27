@@ -317,7 +317,44 @@ def horario(ucs,alunos):
         aluno = next(alunos_it, "end")
     return sorted(sorted(res), key = lambda t: t[1], reverse=True)
 
+'''
 
+Implemente uma função que calcula a tabela classificativa de um campeonato de
+futebol. A função recebe uma lista de resultados de jogos (tuplo com os nomes
+das equipas e os respectivos golos) e deve devolver a tabela classificativa
+(lista com as equipas e respectivos pontos), ordenada decrescentemente pelos
+pontos. Em caso de empate neste critério, deve ser usada a diferença entre o
+número total de golos marcados e sofridos para desempatar, e, se persistir o
+empate, o nome da equipa.
+
+'''
+
+
+def tabela(jogos):
+    equipas = dict()
+    res = list()
+    intermedio = list()
+    for jogo in jogos:
+        x,a,y,b = jogo
+        if x not in equipas: equipas[x] = (0,0)
+        if y not in equipas: equipas[y] = (0,0)
+        pontos_x,golos_x = equipas[x]
+        pontos_y,golos_y = equipas[y]
+        if a > b:
+            equipas[x] = (pontos_x+3,golos_x + (a-b))
+            equipas[y] = (pontos_y,golos_y + (b-a))
+        elif a == b:
+            equipas[x] = (pontos_x+1,golos_x)
+            equipas[y] = (pontos_y+1,golos_y)
+        else:
+            equipas[x] = (pontos_x,golos_x + (a-b))
+            equipas[y] = (pontos_y+3,golos_y + (b-a))
+    intermedio = equipas.items();
+    intermedio = sorted(intermedio)
+    intermedio = sorted(intermedio , key= lambda x: x[1][1],reverse=True)
+    intermedio = sorted(intermedio , key= lambda x: x[1][0],reverse=True)
+    res = [(x,y) for (x,(y,z)) in intermedio]
+    return (res)
 def main():
     print("<h3>robot</h3>")
     cs = "EEAADAAAAAADAAAADDDAAAHAAAH"
