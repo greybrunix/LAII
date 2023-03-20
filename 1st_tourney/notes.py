@@ -248,17 +248,20 @@ A função deve retornar a lista de todas os rectangulos (tuplos com 4 inteiros)
 
 def robot(comandos):
     pos = (0,0)
-    dir_curr = (0,1);
-    a = b = c = d = 0;
-    rs = list();
+    dir_curr = (0,1); # {{0}, {0,1}} up;
+                      # {{1}, {1,0}} right;
+                      # {{0}, {0,-1}} down;
+                      # {{-1},{-1,0}} left
+    min_x = min_y = max_x = max_y = 0;
+    res = list();
     for com in comandos:
         if (com == 'A'):
             pos = tuple(map(lambda i, j: i + j, pos, dir_curr))
             x,y = pos;
-            if x < a: a = x;
-            if y < b: b = y;
-            if x > c: c = x;
-            if y > d: d = y;
+            if x < min_x: min_x = x;
+            if y < min_y: min_y = y;
+            if x > max_x: max_x = x;
+            if y > max_y: max_y = y;
         if (com == 'E'):
             x,y = dir_curr;
             if x != 0: dir_curr = (0,x);
@@ -270,9 +273,9 @@ def robot(comandos):
         if (com == 'H'):
             pos = (0,0)
             dir_curr = (0,1);
-            thing = (a,b,c,d);
-            rs.append(thing);
-            a = b = c = d = 0;
+            coords = (min_x,min_y,max_x,max_y);
+            res.append(thing);
+            min_x = min_y = max_x = max_y = 0;
     return rs;
 """
 
@@ -355,6 +358,8 @@ def tabela(jogos):
     intermedio = sorted(intermedio , key= lambda x: x[1][0],reverse=True)
     res = [(x,y) for (x,(y,z)) in intermedio]
     return (res)
+
+
 def main():
     print("<h3>robot</h3>")
     cs = "EEAADAAAAAADAAAADDDAAAHAAAH"
